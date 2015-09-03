@@ -22,8 +22,12 @@ spice wrap_jsonp_callback => 1;
 spice is_cached => 0;
 spice proxy_cache_valid => '200 304 15m';
 
+my $places = qr/(ny|new york|nyc|new york city|brooklyn|manhattan|queens)/i;
+
 handle remainder => sub {
-    $loc->city.' '.$_ =~ /(ny|new york|nyc|new york city|brooklyn|manhattan|queens)/i;
+    return unless $loc and $loc->city;
+    my $query = $_;
+    $loc->city.' '.$query =~ $places;
     return unless $1;
     return $1;
 };
